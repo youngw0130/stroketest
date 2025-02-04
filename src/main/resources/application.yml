@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/Naebom?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: 3003q300!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 60000ms
+      database: 0
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: heosejin222@gmail.com
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+
+jwt:
+  secret: "secret_key_secret_key_secret_key"
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+cors:
+  allowed-origins: "*"
+  allowed-methods: "GET,POST,PUT,DELETE"
+  allowed-headers: "Authorization,Content-Type"
