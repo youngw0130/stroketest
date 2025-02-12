@@ -58,7 +58,7 @@ public class HospitalService {
             double hospitalLat = (double) location.get("lat");
             double hospitalLng = (double) location.get("lng");
 
-            // 거리 계산 (단위: km)
+            // 사용자와 병원 거리 계산 (단위: km)
             double distance = calculateDistance(userLat, userLng, hospitalLat, hospitalLng);
 
             Map<String, Object> hospitalData = new HashMap<>();

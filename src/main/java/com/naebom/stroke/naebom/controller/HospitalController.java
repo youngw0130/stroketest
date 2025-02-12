@@ -8,7 +8,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hospitals")
-@CrossOrigin(origins = "*")  // CORS 문제 방지 (필요하면 허용할 도메인만 추가)
+@CrossOrigin(origins = "*")  // CORS 문제 방지
 public class HospitalController {
     private final HospitalService hospitalService;
 
