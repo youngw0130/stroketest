@@ -42,3 +42,7 @@ cors:
   allowed-origins: "*"
   allowed-methods: "GET,POST,PUT,DELETE"
   allowed-headers: "Authorization,Content-Type"
+
+google:
+  maps:
+    api-key: AIzaSyAuQNhpD_ilIrQ6nUv9GS7VzaPd9ZbtTEo
