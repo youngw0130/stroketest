@@ -22,21 +22,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // CSRF 비활
+                .csrf(csrf -> csrf.disable()) // CSRF 보호 비활
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // '/auth/**'는 인증 없이 접근 가능
+                        .requestMatchers("/auth/**", "/api/hospitals/**").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("*")); // 모든 출처 ok
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedOrigins(List.of("*")); // 모든 출처 허용
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // OPTIONS 추가
                     config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
                     config.setAllowCredentials(true); // 인증 정보를 포함할 수 있도록 설정
                     return config;
                 }))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 사용 시 세션 비활
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 사용 시 세션 비활성화
                 );
 
         return http.build();

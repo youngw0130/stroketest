@@ -26,7 +26,7 @@ public class HospitalService {
                 .queryParam("radius", 10000)
                 .queryParam("type", "hospital")
                 .queryParam("language", "ko")
-                .queryParam("keyword", "뇌졸중")
+                .queryParam("keyword", "stroke")
                 .queryParam("key", apiKey)
                 .toUriString();
 
@@ -65,9 +65,9 @@ public class HospitalService {
             hospitalData.put("name", hospital.get("name")); // 병원이름
             hospitalData.put("latitude", hospitalLat); // 병원 위도
             hospitalData.put("longitude", hospitalLng); // 병원 경도
-            hospitalData.put("address", hospital.get("formatted_address"));
+          /*  hospitalData.put("address", hospital.get("formatted_address"));
             hospitalData.put("phone_number", hospital.get("formatted_phone_number"));
-            hospitalData.put("opening_hours", hospital.get("opening_hours"));
+            hospitalData.put("opening_hours", hospital.get("opening_hours"));*/
             hospitalData.put("distance_km", String.format("%.2f", distance)); // 사용자와 병원의 거리 (소수점 2자리)
 
             processedHospitals.add(hospitalData);
