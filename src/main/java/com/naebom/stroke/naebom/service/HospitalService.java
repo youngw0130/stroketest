@@ -80,7 +80,7 @@ public class HospitalService {
         return processedHospitals;
     }
 
-    // 📌 Google Places API "details" (병원 상세 정보 가져오기)
+    //Google Places API "details" (병원 상세 정보 가져오기)
     private Map<String, Object> getHospitalDetails(String placeId) {
         if (placeId == null) return new HashMap<>();
 

@@ -24,7 +24,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/api/hospitals/**").permitAll() //인증 없이 접근 가능
+                        .requestMatchers("/auth/**", "/api/hospitals/**","/api/speech/**").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .cors(cors -> cors.configurationSource(request -> {

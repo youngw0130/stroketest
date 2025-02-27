@@ -1,48 +1,41 @@
+
 package com.naebom.stroke.naebom.service;
 
 import com.microsoft.cognitiveservices.speech.*;
-import com.naebom.stroke.naebom.utils.LevenshteinUtil;
+import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+import com.naebom.stroke.naebom.dto.SpeechEvaluationRequestDto;
 import org.springframework.stereotype.Service;
-import java.io.*;
 import java.util.Base64;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @Service
-public class SpeechService {
+public class SpeechEvaluationService {
 
     private final SpeechConfig speechConfig;
 
-    public SpeechService(SpeechConfig speechConfig) {
+    public SpeechEvaluationService(SpeechConfig speechConfig) {
         this.speechConfig = speechConfig;
     }
 
-    public double processAudio(String base64Audio, String originalText) throws Exception {
-        String filePath = "temp_audio.wav";
+    public double evaluateSpeech(SpeechEvaluationRequestDto request) throws Exception {
+        byte[] audioBytes = Base64.getDecoder().decode(request.getBase64Audio());
 
-        // Base64 데이터를 디코딩하여 WAV 파일로 저장
-        byte[] audioBytes = Base64.getDecoder().decode(base64Audio);
-        Files.write(Paths.get(filePath), audioBytes);
+        // 음성 인식 구성
+        AudioConfig audioConfig = AudioConfig.fromWavFileInput("temp_audio.wav");
+        PronunciationAssessmentConfig pronunciationConfig = new PronunciationAssessmentConfig(
+                request.getExpectedText(),
+                PronunciationAssessmentGradingSystem.HundredMark,
+                PronunciationAssessmentGranularity.Phoneme);
 
-        // 음성을 텍스트로 변환
-        String transcribedText = transcribeAudio(filePath);
+        SpeechRecognizer recognizer = new SpeechRecognizer(speechConfig, audioConfig);
+        pronunciationConfig.applyTo(recognizer);
 
-        // 변환된 텍스트와 원본 텍스트 비교
-        return calculateAccuracy(transcribedText, originalText);
-    }
+        SpeechRecognitionResult result = recognizer.recognizeOnceAsync().get();
 
-    private String transcribeAudio(String filePath) throws Exception {
-        SpeechRecognizer recognizer = new SpeechRecognizer(speechConfig, AudioConfig.fromWavFileInput(filePath));
-        Future<SpeechRecognitionResult> resultFuture = recognizer.recognizeOnceAsync();
-        SpeechRecognitionResult result = resultFuture.get();
-        recognizer.close();
-
-        return result.getText(); // 변환된 텍스트 반환
-    }
-
-    private double calculateAccuracy(String transcribedText, String originalText) {
-        int distance = LevenshteinUtil.levenshteinDistance(transcribedText, originalText);
-        int maxLength = Math.max(transcribedText.length(), originalText.length());
-        return (1 - (double) distance / maxLength) * 100; // 퍼센트(%) 값 반환
+        if (result.getReason() == ResultReason.RecognizedSpeech) {
+            return PronunciationAssessmentResult.fromResult(result).getPronunciationScore();
+        } else {
+            throw new RuntimeException("음성 인식 실패: " + result.getReason());
+        }
     }
 }
+

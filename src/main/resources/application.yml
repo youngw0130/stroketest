@@ -27,7 +27,10 @@ spring:
           starttls:
             enable: true
         debug: true
-
+azure:
+  speech:
+    key: $AZURE_SPEECH_KEY
+    region: $AZURE_SPEECH_REGION
 jwt:
   secret: "secret_key_secret_key_secret_key"
 

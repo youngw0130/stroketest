@@ -1,7 +1,11 @@
 package com.naebom.stroke.naebom.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SpeechEvaluationRequestDto {
+    @JsonProperty("expectedText")
     private String expectedText;
+    @JsonProperty("base64Audio")
     private String base64Audio;
 
     public SpeechEvaluationRequestDto() {}
